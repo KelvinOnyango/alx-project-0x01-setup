@@ -1,32 +1,50 @@
 // pages/posts/index.tsx
 import PostCard from "@/components/common/PostCard";
+import PostModal from "@/components/common/PostModal";
 import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
-import Button from "@/components/common/Button";
-import { PostProps } from "@/interfaces";
+import { PostData, PostProps } from "@/interfaces";
+import { useState } from "react";
 
-interface PostsPageProps {
-  posts: PostProps[];
-}
+const Posts: React.FC<{ posts: PostProps[] }> = ({ posts }) => {
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [post, setPost] = useState<PostData | null>(null);
 
-const Posts: React.FC<PostsPageProps> = ({ posts }) => {
+  const handleAddPost = (newPost: PostData) => {
+    setPost({ ...newPost, id: posts.length + 1 });
+  };
+
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col h-screen">
       <Header />
-      <main className="p-4 flex-grow">
-        <div className="flex justify-between mb-6">
+      <main className="p-4">
+        <div className="flex justify-between">
           <h1 className="text-2xl font-semibold">Post Content</h1>
-          <Button className="bg-blue-700 text-white hover:bg-blue-800">
+          <button
+            onClick={() => setModalOpen(true)}
+            className="bg-blue-700 px-4 py-2 rounded-full text-white"
+          >
             Add Post
-          </Button>
+          </button>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {posts?.map((post: PostProps) => (
-            <PostCard key={post.id} {...post} />
+          {posts?.map(({ title, body, userId, id }: PostProps, key: number) => (
+            <PostCard
+              title={title}
+              body={body}
+              userId={userId}
+              id={id}
+              key={key}
+            />
           ))}
         </div>
       </main>
-      <Footer />
+
+      {isModalOpen && (
+        <PostModal
+          onClose={() => setModalOpen(false)}
+          onSubmit={handleAddPost}
+        />
+      )}
     </div>
   );
 };
