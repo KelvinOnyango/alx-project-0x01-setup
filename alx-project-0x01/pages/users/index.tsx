@@ -1,4 +1,3 @@
-// pages/users/index.tsx
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import UserCard from "@/components/common/UserCard";
@@ -20,7 +19,7 @@ const Users: React.FC<UsersPageProps> = ({ users }) => {
           </button>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {users?.map((user: UserProps) => (
+          {users.map((user) => (
             <UserCard key={user.id} {...user} />
           ))}
         </div>
